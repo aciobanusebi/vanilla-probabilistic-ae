@@ -33,8 +33,8 @@ for ____ in ["____"]: # indent problem if not included
     dist_type = sys.argv[4]
     dataset_name = sys.argv[5]
 
-    if number_of_distributions == 10 and (dist_type == "normal" or dist_type == "t"):
-      raise Exception("out of memory")
+    # if number_of_distributions == 10 and (dist_type == "normal" or dist_type == "t"):
+      # raise Exception("out of memory")
 
     if dist_type in ['mse',"nf", "matrix_mse","vae"]:
       if number_of_distributions != 1:
