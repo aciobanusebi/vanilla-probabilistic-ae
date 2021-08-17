@@ -807,9 +807,11 @@ for ____ in ["____"]: # indent problem if not included
     from skimage.transform import resize
 
     def scale_images(images, new_shape):
+      # from https://stackoverflow.com/questions/55421153/fr%C3%A9chet-inception-distance-parameters-choice-in-tensorflow
         return np.asarray([resize(image, new_shape, 0) for image in images])
 
     def calculate_fid(model, images1, images2):
+      # from https://stackoverflow.com/questions/55421153/fr%C3%A9chet-inception-distance-parameters-choice-in-tensorflow
         f1, f2 = [model.predict(im) for im in (images1, images2)]
         mean1, sigma1 = f1.mean(axis=0), np.cov(f1, rowvar=False)
         mean2, sigma2 = f2.mean(axis=0), np.cov(f2, rowvar=False)
@@ -821,6 +823,7 @@ for ____ in ["____"]: # indent problem if not included
         return fid
 
     def fid(dataset):
+      # from https://stackoverflow.com/questions/55421153/fr%C3%A9chet-inception-distance-parameters-choice-in-tensorflow
         input_shape = (299, 299, 3)
 
         inception = InceptionV3(include_top=False, pooling='avg', input_shape=input_shape)
@@ -866,15 +869,58 @@ for ____ in ["____"]: # indent problem if not included
     else:
       X_test_autoenc=tf.clip_by_value(autoencoder_model.predict(X_test[:fid_how_many]), clip_value_min=0.0, clip_value_max=1.0).numpy()
 
+    import tensorflow as tf
+    def l1_error(x,y,max_val=1.0):
+      return tf.reduce_mean(tf.abs(x/max_val - y/max_val),axis=[1,2,3]).numpy() * 100.0
+
+    def l2_error(x,y,max_val=1.0):
+      return tf.reduce_mean((x/max_val - y/max_val) ** 2,axis=[1,2,3]).numpy() * 100.0
+
+    # tf.image.psnr(x,y,max_val=1.0).numpy()
+
+    # tf.image.ssim(x,y,max_val=1.0).numpy()
+
+    aux_val1 = X_test[:fid_how_many].reshape((fid_how_many,SHAPE[0],SHAPE[1],1))
+    aux_val2 = X_test_autoenc[:fid_how_many].reshape((fid_how_many,SHAPE[0],SHAPE[1],1))
+
+    L1_ERRORS = l1_error(aux_val1,aux_val2,max_val=1.0)
+    L2_ERRORS = l2_error(aux_val1,aux_val2,max_val=1.0)
+    PSNR_ERRORS = tf.image.psnr(aux_val1,aux_val2,max_val=1.0).numpy()
+    SSIM_ERRORS = tf.image.ssim(aux_val1,aux_val2,max_val=1.0).numpy()
+
+    # print(L1_ERRORS)
+    # print(L2_ERRORS)
+    # print(PSNR_ERRORS)
+    # print(SSIM_ERRORS)
+
+    file = open(os.path.join(OUTPUT_DIRECTORY, str(number_of_distributions) + "-" + arch_type + "-" + dist_type +"-" +dataset_name + "-text_ERRORS.txt"),"w")
+    file.write(str(L1_ERRORS)+"\n")
+    file.write(str(L2_ERRORS)+"\n")
+    file.write(str(PSNR_ERRORS)+"\n")
+    file.write(str(SSIM_ERRORS)+"\n")
+    file.close()
+
+    print(L1_ERRORS.mean())
+    print(L2_ERRORS.mean())
+    print(PSNR_ERRORS.mean())
+    print(SSIM_ERRORS.mean())
+
+    file = open(os.path.join(OUTPUT_DIRECTORY, str(number_of_distributions) + "-" + arch_type + "-" + dist_type +"-" +dataset_name + "-text_ERROR.txt"),"w")
+    file.write(str(L1_ERRORS.mean())+"\n")
+    file.write(str(L2_ERRORS.mean())+"\n")
+    file.write(str(PSNR_ERRORS.mean())+"\n")
+    file.write(str(SSIM_ERRORS.mean())+"\n")
+    file.close()
+
     if dist_type == "mse":
       # just once
-      value=fid(X_test[:fid_how_many])
+      value=fid(X_test[:fid_how_many].reshape((fid_how_many,SHAPE[0],SHAPE[1])))
       print(value)
       file = open(os.path.join(OUTPUT_DIRECTORY, str(number_of_distributions) + "-" + arch_type + "-" + dist_type +"-" +dataset_name + "-text1.txt"),"w")
       file.write(str(value))
       file.close()
 
-    value=fid(X_test_autoenc[:fid_how_many])
+    value=fid(X_test_autoenc[:fid_how_many].reshape((fid_how_many,SHAPE[0],SHAPE[1])))
     print(value) # len(X_test_autoenc) == fid_how_many ...
     file = open(os.path.join(OUTPUT_DIRECTORY, str(number_of_distributions) + "-" + arch_type + "-" + dist_type +"-" +dataset_name + "-text2.txt"),"w")
     file.write(str(value))
