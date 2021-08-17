@@ -886,7 +886,8 @@ for ____ in ["____"]: # indent problem if not included
     L1_ERRORS = l1_error(aux_val1,aux_val2,max_val=1.0)
     L2_ERRORS = l2_error(aux_val1,aux_val2,max_val=1.0)
     PSNR_ERRORS = tf.image.psnr(aux_val1,aux_val2,max_val=1.0).numpy()
-    SSIM_ERRORS = tf.image.ssim(aux_val1,aux_val2,max_val=1.0).numpy()
+    SSIM_ERRORS = tf.image.ssim(aux_val1.astype(np.float32),
+                            aux_val2.astype(np.float32),max_val=1.0).numpy()
 
     # print(L1_ERRORS)
     # print(L2_ERRORS)
