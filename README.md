@@ -5,6 +5,6 @@ The autoencoder, a well-known neural network model, is usually fitted using a me
 
 # Code
 - .py version
-  - run "run.py"; this calls "main.py" with all the possible values for the command line arguments
-- .ipynb version [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/aciobanusebi/vanilla-probabilistic-ae/blob/main/AE_distribution_at_output.ipynb); if you encounter problems because of the indentation, consider using "main-weird-indent.py" instead of "main.py"
+  - run "run.py"; this calls "main.py" with all the possible values for the command line arguments; if you encounter problems because of the indentation, consider using "main-weird-indent.py" instead of "main.py"
+- .ipynb version [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/aciobanusebi/vanilla-probabilistic-ae/blob/main/AE_distribution_at_output.ipynb)
   - run for a given set of arguments the code interactively
