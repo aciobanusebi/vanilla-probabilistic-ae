@@ -1,5 +1,5 @@
 # Vanilla Probabilistic Autoencoder
-
+https://easychair.org/publications/paper/R2l1
 # Paper abstract
 The autoencoder, a well-known neural network model, is usually fitted using a mean squared error loss or a cross-entropy loss. Both losses have a probabilistic interpretation: they are equivalent to maximizing the likelihood of the dataset when one uses a normal distribution or a categorical distribution respectively. We trained autoencoders on image datasets using different distributions and noticed the differences from the initial autoencoder: if a mixture of distributions is used the quality of the reconstructed images may increase and the dataset can be augmented; one can often visualize the reconstructed image along with the variances corresponding to each pixel. 
 
